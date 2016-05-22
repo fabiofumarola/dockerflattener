@@ -1,0 +1,22 @@
+---
+version: "2"
+services:
+  traverser:
+    image: "data2knowledge/phantomtraverser:latest"
+    ports:
+      - "15000:3000"
+    links:
+      - "redis:redis"
+    depends_on:
+      - "redis"
+  redis:
+    image: redis:3-alpine
+    ports:
+      - "6379:6379"
+  listflattener:
+    image: "kdde/listflattener:latest"
+    ports:
+      - "9000:9000"
+    command: java -jar listflattener/target/ListFlattener-1.1.9-jar-with-dependencies.jar http://traverser:3000
+  datarecordaligner:
+    image: "kdde/"
